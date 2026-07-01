@@ -1,318 +1,113 @@
-:root{
-    --azul:#0054A6;
-    --azul-claro:#0b6fd1;
-    --azul-oscuro:#003B73;
-    --blanco:#ffffff;
-    --texto:#f5f7fa;
-    --tarjeta:rgba(255,255,255,.12);
-    --borde:rgba(255,255,255,.15);
-    --radio:20px;
-    --sombra:0 12px 30px rgba(0,0,0,.25);
-}
-
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 body{
-
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-
-    color:var(--texto);
-
-    background:
-    radial-gradient(circle at top,var(--azul-claro) 0%,var(--azul) 45%,var(--azul-oscuro) 100%);
-
-    min-height:100vh;
-
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#0054A6,#003b75);
+  color:#fff;
+  min-height:100vh;
 }
 
 .contenedor{
-
-    width:min(92%,520px);
-
-    margin:auto;
-
-    padding:30px 0 50px;
-
+  width:min(92%,700px);
+  margin:30px auto;
 }
 
 .escudo{
-
-    width:170px;
-
-    display:block;
-
-    margin:auto;
-
-    margin-bottom:25px;
-
-    filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));
-
-    animation:entrada .8s ease;
-
+  display:block;
+  width:120px;
+  margin:0 auto 20px;
 }
 
 h1{
-
-    text-align:center;
-
-    font-size:2rem;
-
-    line-height:1.2;
-
-    margin-bottom:18px;
-
-    font-weight:700;
-
+  text-align:center;
+  font-size:2rem;
+  margin-bottom:15px;
 }
 
 .descripcion{
-
-    text-align:center;
-
-    line-height:1.7;
-
-    font-size:1.05rem;
-
-    margin-bottom:30px;
-
-    opacity:.95;
-
+  text-align:center;
+  opacity:.95;
+  line-height:1.5;
+  margin-bottom:25px;
 }
 
 .boton{
-
-    display:block;
-
-    width:100%;
-
-    text-align:center;
-
-    text-decoration:none;
-
-    background:#fff;
-
-    color:var(--azul);
-
-    padding:18px;
-
-    border-radius:18px;
-
-    font-weight:700;
-
-    font-size:1.15rem;
-
-    box-shadow:var(--sombra);
-
-    transition:.25s;
-
-}
-
-.boton:active{
-
-    transform:scale(.98);
-
-}
-
-.tarjeta{
-
-    margin-top:22px;
-
-    background:var(--tarjeta);
-
-    border:1px solid var(--borde);
-
-    backdrop-filter:blur(14px);
-
-    border-radius:var(--radio);
-
-    padding:22px;
-
-    box-shadow:var(--sombra);
-
-}
-
-.tarjeta h2{
-
-    font-size:1.15rem;
-
-    margin-bottom:15px;
-
-}
-
-#nextMatch{
-
-    font-size:1.05rem;
-
-    line-height:1.8;
-
-}
-.compatibilidad{
-
-    text-align:center;
-
-    line-height:1.8;
-
-    font-size:1rem;
-
-    font-weight:500;
-
-}
-
-.compatibilidad span{
-
-    white-space:nowrap;
-
-}
-
-footer{
-
-    margin-top:35px;
-
-    text-align:center;
-
-    font-size:.95rem;
-
-    opacity:.85;
-
-    padding-bottom:20px;
-
-}
-
-footer strong{
-
-    color:#ffffff;
-
-}
-
-@keyframes entrada{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(-25px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-@keyframes pulso{
-
-    0%{
-
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        transform:scale(1.02);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
-}
-
-.boton{
-
-    animation:pulso 2.8s infinite;
-
+  display:block;
+  width:100%;
+  text-align:center;
+  background:#ffd100;
+  color:#003b75;
+  text-decoration:none;
+  padding:16px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:1.1rem;
+  margin-bottom:25px;
+  transition:.2s;
 }
 
 .boton:hover{
-
-    transform:translateY(-2px);
-
+  transform:translateY(-2px);
 }
 
 .tarjeta{
-
-    transition:.25s;
-
+  background:#ffffff;
+  color:#1f2937;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
 }
 
-.tarjeta:hover{
-
-    transform:translateY(-3px);
-
+.tarjeta h2{
+  margin-bottom:15px;
+  color:#0054A6;
 }
 
-@media (max-width:480px){
-
-    .contenedor{
-
-        width:94%;
-
-    }
-
-    .escudo{
-
-        width:160px;
-
-    }
-
-    h1{
-
-        font-size:1.75rem;
-
-    }
-
-    .descripcion{
-
-        font-size:1rem;
-
-    }
-
-    .boton{
-
-        font-size:1.1rem;
-
-        padding:16px;
-
-    }
-
-    .tarjeta{
-
-        padding:18px;
-
-    }
-
-    .compatibilidad{
-
-        font-size:.95rem;
-
-    }
-
+#nextMatch{
+  text-align:center;
+  line-height:1.8;
 }
 
-@media (prefers-color-scheme:dark){
+.match-card{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-    body{
+.match-type{
+  color:#0054A6;
+  font-weight:700;
+  font-size:1rem;
+}
 
-        background:
-        radial-gradient(circle at top,#0c6fd6 0%,#004f9d 40%,#002b55 100%);
+.match-rival{
+  font-size:1.6rem;
+  font-weight:800;
+}
 
-    }
+.match-vs{
+  font-size:1.05rem;
+}
 
+.match-date,
+.match-place,
+.match-countdown{
+  font-size:1rem;
+}
+
+footer{
+  text-align:center;
+  opacity:.9;
+  margin:30px 0;
+}
+
+@media (max-width:600px){
+  h1{font-size:1.7rem;}
+  .escudo{width:100px;}
+  .match-rival{font-size:1.35rem;}
 }
