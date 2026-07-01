@@ -1,113 +1,173 @@
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,#0054A6,#003b75);
-  color:#fff;
-  min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:linear-gradient(180deg,#0054A6 0%,#003B75 100%);
+    color:#fff;
+    min-height:100vh;
 }
 
 .contenedor{
-  width:min(92%,700px);
-  margin:30px auto;
+    width:min(92%,700px);
+    margin:30px auto;
 }
 
 .escudo{
-  display:block;
-  width:120px;
-  margin:0 auto 20px;
+    display:block;
+    width:120px;
+    margin:0 auto 20px;
 }
 
 h1{
-  text-align:center;
-  font-size:2rem;
-  margin-bottom:15px;
+    text-align:center;
+    font-size:2rem;
+    font-weight:800;
+    margin-bottom:15px;
 }
 
 .descripcion{
-  text-align:center;
-  opacity:.95;
-  line-height:1.5;
-  margin-bottom:25px;
+    text-align:center;
+    line-height:1.6;
+    opacity:.95;
+    margin-bottom:25px;
 }
 
 .boton{
-  display:block;
-  width:100%;
-  text-align:center;
-  background:#ffd100;
-  color:#003b75;
-  text-decoration:none;
-  padding:16px;
-  border-radius:14px;
-  font-weight:700;
-  font-size:1.1rem;
-  margin-bottom:25px;
-  transition:.2s;
+    display:block;
+    width:100%;
+    text-align:center;
+    text-decoration:none;
+    background:#FFD100;
+    color:#003B75;
+    padding:16px;
+    border-radius:14px;
+    font-size:1.1rem;
+    font-weight:700;
+    margin-bottom:25px;
+    transition:.25s;
 }
 
 .boton:hover{
-  transform:translateY(-2px);
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 
 .tarjeta{
-  background:#ffffff;
-  color:#1f2937;
-  border-radius:18px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,.18);
+    background:#fff;
+    color:#1f2937;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
 }
 
 .tarjeta h2{
-  margin-bottom:15px;
-  color:#0054A6;
+    text-align:center;
+    color:#0054A6;
+    margin-bottom:18px;
 }
 
 #nextMatch{
-  text-align:center;
-  line-height:1.8;
+    text-align:center;
 }
 
 .match-card{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
 }
 
 .match-type{
-  color:#0054A6;
-  font-weight:700;
-  font-size:1rem;
+    display:inline-block;
+    background:#0054A6;
+    color:#fff;
+    padding:8px 18px;
+    border-radius:999px;
+    font-size:.95rem;
+    font-weight:700;
+    letter-spacing:.5px;
+    margin-bottom:18px;
 }
 
 .match-rival{
-  font-size:1.6rem;
-  font-weight:800;
+    font-size:2rem;
+    font-weight:800;
+    color:#003B75;
+    text-transform:uppercase;
+    margin-bottom:10px;
 }
 
 .match-vs{
-  font-size:1.05rem;
+    font-size:1.1rem;
+    color:#666;
+    margin-bottom:20px;
 }
 
-.match-date,
-.match-place,
+.match-date{
+    width:100%;
+    background:#EEF5FF;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.match-place{
+    width:100%;
+    background:#F5F5F5;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:12px;
+}
+
 .match-countdown{
-  font-size:1rem;
+    width:100%;
+    background:#FFD100;
+    color:#003B75;
+    border-radius:14px;
+    padding:14px;
+    font-size:1.1rem;
+    font-weight:700;
+}
+
+.tarjeta p{
+    line-height:1.6;
+    text-align:center;
 }
 
 footer{
-  text-align:center;
-  opacity:.9;
-  margin:30px 0;
+    text-align:center;
+    margin:30px 0;
+    opacity:.9;
+    font-size:.95rem;
 }
 
 @media (max-width:600px){
-  h1{font-size:1.7rem;}
-  .escudo{width:100px;}
-  .match-rival{font-size:1.35rem;}
+
+    .contenedor{
+        width:94%;
+    }
+
+    .escudo{
+        width:100px;
+    }
+
+    h1{
+        font-size:1.7rem;
+    }
+
+    .match-rival{
+        font-size:1.55rem;
+    }
+
+    .boton{
+        font-size:1rem;
+        padding:15px;
+    }
+
 }
