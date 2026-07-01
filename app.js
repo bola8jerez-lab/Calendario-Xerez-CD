@@ -1,88 +1,64 @@
 const WEBCAL_URL = "webcal://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
-const HTTPS_URL = "https://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
+const ICS_URL = "https://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
 
 const boton = document.getElementById("subscribeBtn");
-const ua = navigator.userAgent.toLowerCase();
+const nextMatch = document.getElementById("nextMatch");
 
-if (/iphone|ipad|ipod/.test(ua)) {
-boton.textContent = "📅 Añadir al calendario";
-} else if (/android/.test(ua)) {
-    boton.textContent = "🤖 Añadir al calendario";
-} else {
-    boton.textContent = "💻 Suscribirse al calendario";
-}
+// ---------- BOTÓN ----------
 
 boton.href = WEBCAL_URL;
+boton.innerHTML = "📅 Añadir al calendario";
+
+// ---------- CALENDARIO ----------
 
 async function cargarCalendario() {
 
+    nextMatch.innerHTML = "🔄 Buscando próximo partido...";
+
     try {
 
-        const respuesta = await fetch(HTTPS_URL + "?v=" + Date.now());
+        const respuesta = await fetch(ICS_URL + "?t=" + Date.now());
 
-        const ics = await respuesta.text();
+        const texto = await respuesta.text();
 
-        const eventos = ics.split("BEGIN:VEVENT");
+        const jcal = ICAL.parse(texto);
+
+        const comp = new ICAL.Component(jcal);
+
+        const eventos = comp.getAllSubcomponents("vevent");
 
         const ahora = new Date();
 
         let proximo = null;
 
-        eventos.forEach(evento => {
+        eventos.forEach(ev => {
 
-            const resumen = evento.match(/SUMMARY:(.+)/);
+            const evento = new ICAL.Event(ev);
 
-            const fecha = evento.match(/DTSTART[^:]*:(\d{8}T\d{6}|\d{8})/);
+            const inicio = evento.startDate.toJSDate();
 
-            if (!resumen || !fecha) return;
+            if (inicio <= ahora) return;
 
-            const valor = fecha[1];
+            if (!proximo || inicio < proximo.fecha) {
 
-            let partido;
+                proximo = {
 
-            if (valor.length === 8) {
+                    titulo: evento.summary,
 
-                partido = new Date(
-                    Number(valor.slice(0,4)),
-                    Number(valor.slice(4,6))-1,
-                    Number(valor.slice(6,8))
-                );
+                    fecha: inicio,
 
-            } else {
+                    lugar: evento.location || ""
 
-                partido = new Date(
-                    Number(valor.slice(0,4)),
-                    Number(valor.slice(4,6))-1,
-                    Number(valor.slice(6,8)),
-                    Number(valor.slice(9,11)),
-                    Number(valor.slice(11,13))
-                );
-
-            }
-
-            if (partido > ahora) {
-
-                if (!proximo || partido < proximo.fecha) {
-
-                    proximo = {
-
-                        fecha: partido,
-
-                        titulo: resumen[1].trim()
-
-                    };
-
-                }
+                };
 
             }
 
         });
 
-        const caja = document.getElementById("nextMatch");
-
         if (!proximo) {
 
-            caja.innerHTML = "No hay partidos programados.";
+            nextMatch.innerHTML =
+                "📅 El calendario todavía no contiene partidos futuros.";
 
             return;
 
@@ -94,31 +70,48 @@ async function cargarCalendario() {
 
         const horas = Math.floor((diferencia % 86400000) / 3600000);
 
-        caja.innerHTML = `
-            <strong>${proximo.titulo}</strong><br><br>
+        nextMatch.innerHTML = `
+
+            <strong>${proximo.titulo}</strong>
+
+            <br><br>
 
             📅 ${proximo.fecha.toLocaleDateString("es-ES",{
+
                 weekday:"long",
+
                 day:"numeric",
+
                 month:"long"
-            })}<br>
+
+            })}
+
+            <br>
 
             🕒 ${proximo.fecha.toLocaleTimeString("es-ES",{
-                hour:"2-digit",
-                minute:"2-digit"
-            })}<br><br>
 
-            ⏳ Faltan ${dias} días y ${horas} horas
+                hour:"2-digit",
+
+                minute:"2-digit"
+
+            })}
+
+            ${proximo.lugar ? `<br>📍 ${proximo.lugar}` : ""}
+
+            <br><br>
+
+            ⏳ Faltan <strong>${dias}</strong> días y <strong>${horas}</strong> horas
+
         `;
 
     }
 
-    catch(e){
+    catch(error){
 
-        document.getElementById("nextMatch").innerHTML =
-        "⚠️ Error al cargar el calendario.";
+        console.error(error);
 
-        console.error(e);
+        nextMatch.innerHTML =
+        "⚠️ No se pudo leer el calendario.";
 
     }
 
