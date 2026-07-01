@@ -1,120 +1,79 @@
-const WEBCAL_URL = "webcal://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
 const ICS_URL = "https://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
+const WEBCAL_URL = "webcal://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendario.ics";
 
-const boton = document.getElementById("subscribeBtn");
+document.getElementById("subscribeBtn").href = WEBCAL_URL;
+
 const nextMatch = document.getElementById("nextMatch");
 
-// ---------- BOTÓN ----------
-
-boton.href = WEBCAL_URL;
-boton.innerHTML = "📅 Añadir al calendario";
-
-// ---------- CALENDARIO ----------
-
 async function cargarCalendario() {
-
-    nextMatch.innerHTML = "🔄 Buscando próximo partido...";
-
     try {
+
+        nextMatch.innerHTML = "🔄 Cargando calendario...";
 
         const respuesta = await fetch(ICS_URL + "?t=" + Date.now());
 
+        if (!respuesta.ok) {
+            throw new Error("HTTP " + respuesta.status);
+        }
+
         const texto = await respuesta.text();
 
+        console.log(texto.substring(0,200));
+
+        if (typeof ICAL === "undefined") {
+            throw new Error("La librería ICAL no se ha cargado.");
+        }
+
         const jcal = ICAL.parse(texto);
-
         const comp = new ICAL.Component(jcal);
-
         const eventos = comp.getAllSubcomponents("vevent");
 
         const ahora = new Date();
-
-        let proximo = null;
+        let siguiente = null;
 
         eventos.forEach(ev => {
 
-            const evento = new ICAL.Event(ev);
+            const e = new ICAL.Event(ev);
+            const fecha = e.startDate.toJSDate();
 
-            const inicio = evento.startDate.toJSDate();
+            if (fecha < ahora) return;
 
-            if (inicio <= ahora) return;
+            if (!siguiente || fecha < siguiente.fecha) {
 
-            if (!proximo || inicio < proximo.fecha) {
-
-                proximo = {
-
-                    titulo: evento.summary,
-
-                    fecha: inicio,
-
-                    lugar: evento.location || ""
-
+                siguiente = {
+                    titulo: e.summary,
+                    fecha: fecha,
+                    lugar: e.location || "Por confirmar"
                 };
 
             }
 
         });
 
-        if (!proximo) {
+        if (!siguiente) {
 
             nextMatch.innerHTML =
-                "📅 El calendario todavía no contiene partidos futuros.";
+                "No hay partidos futuros.";
 
             return;
-
         }
 
-        const diferencia = proximo.fecha - ahora;
+        nextMatch.innerHTML = `
+            <strong>${siguiente.titulo}</strong><br><br>
+            📅 ${siguiente.fecha.toLocaleDateString("es-ES")}<br>
+            📍 ${siguiente.lugar}
+        `;
 
-        const dias = Math.floor(diferencia / 86400000);
+    } catch (e) {
 
-        const horas = Math.floor((diferencia % 86400000) / 3600000);
+        console.error(e);
 
         nextMatch.innerHTML = `
-
-            <strong>${proximo.titulo}</strong>
-
-            <br><br>
-
-            📅 ${proximo.fecha.toLocaleDateString("es-ES",{
-
-                weekday:"long",
-
-                day:"numeric",
-
-                month:"long"
-
-            })}
-
-            <br>
-
-            🕒 ${proximo.fecha.toLocaleTimeString("es-ES",{
-
-                hour:"2-digit",
-
-                minute:"2-digit"
-
-            })}
-
-            ${proximo.lugar ? `<br>📍 ${proximo.lugar}` : ""}
-
-            <br><br>
-
-            ⏳ Faltan <strong>${dias}</strong> días y <strong>${horas}</strong> horas
-
+        <strong>ERROR</strong><br><br>
+        ${e.message}
         `;
 
     }
-
-    catch (error) {
-    console.error(error);
-
-    nextMatch.innerHTML = `
-        <strong>Error:</strong><br>
-        <code>${error.name}</code><br>
-        ${error.message}
-    `;
-}
 }
 
 cargarCalendario();
