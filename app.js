@@ -21,17 +21,21 @@ async function cargarCalendario() {
         const texto = await respuesta.text();
 
         const eventos = [];
-
         const bloques = texto.split("BEGIN:VEVENT");
 
         for (let i = 1; i < bloques.length; i++) {
 
             const bloque = bloques[i];
 
-            const resumen = obtenerCampo(bloque, "SUMMARY");
-            const fecha = obtenerCampo(bloque, "DTSTART;VALUE=DATE") ||
-                          obtenerCampo(bloque, "DTSTART");
-            const lugar = obtenerCampo(bloque, "LOCATION");
+            const resumen =
+                obtenerCampo(bloque, "SUMMARY");
+
+            const fecha =
+                obtenerCampo(bloque, "DTSTART;VALUE=DATE") ||
+                obtenerCampo(bloque, "DTSTART");
+
+            const lugar =
+                obtenerCampo(bloque, "LOCATION");
 
             if (!fecha) continue;
 
@@ -59,11 +63,9 @@ async function cargarCalendario() {
             if (!proximo || fecha < proximo.fecha) {
 
                 proximo = {
-
                     titulo: evento.resumen,
                     fecha: fecha,
                     lugar: evento.lugar || "Por confirmar"
-
                 };
 
             }
@@ -80,28 +82,66 @@ async function cargarCalendario() {
         }
 
         const diferencia = proximo.fecha - hoy;
-
         const dias = Math.floor(diferencia / 86400000);
 
+        const juegaEnCasa =
+            proximo.titulo.startsWith("Xerez CD");
+
+        const rival = juegaEnCasa
+            ? proximo.titulo.replace("Xerez CD vs ", "")
+            : proximo.titulo.replace(" vs Xerez CD", "");
+
+        const tipoPartido = juegaEnCasa
+            ? "🏠 EN CHAPÍN"
+            : "✈️ FUERA DE CASA";
+
         nextMatch.innerHTML = `
-            <strong>${proximo.titulo}</strong>
 
-            <br><br>
+            <div class="match-card">
 
-            📅 ${proximo.fecha.toLocaleDateString("es-ES",{
-                weekday:"long",
-                day:"numeric",
-                month:"long",
-                year:"numeric"
-            })}
+                <div class="match-type">
+                    ${tipoPartido}
+                </div>
 
-            <br>
+                <div class="match-rival">
 
-            📍 ${proximo.lugar}
+                    ${rival}
 
-            <br><br>
+                </div>
 
-            ⏳ Faltan <strong>${dias}</strong> días
+                <div class="match-vs">
+
+                    🆚 Xerez Club Deportivo
+
+                </div>
+
+                <div class="match-date">
+
+                    📅 ${proximo.fecha.toLocaleDateString("es-ES",{
+
+                        weekday:"long",
+                        day:"numeric",
+                        month:"long",
+                        year:"numeric"
+
+                    })}
+
+                </div>
+
+                <div class="match-place">
+
+                    📍 ${proximo.lugar}
+
+                </div>
+
+                <div class="match-countdown">
+
+                    ⏳ Faltan <strong>${dias}</strong> días
+
+                </div>
+
+            </div>
+
         `;
 
     }
@@ -111,15 +151,20 @@ async function cargarCalendario() {
         console.error(error);
 
         nextMatch.innerHTML = `
-        <strong>Error</strong><br><br>
-        ${error.message}
+
+            <strong>⚠️ Error</strong>
+
+            <br><br>
+
+            ${error.message}
+
         `;
 
     }
 
 }
 
-function obtenerCampo(texto, campo){
+function obtenerCampo(texto,campo){
 
     const lineas = texto.split(/\r?\n/);
 
@@ -127,7 +172,7 @@ function obtenerCampo(texto, campo){
 
         if(linea.startsWith(campo + ":")){
 
-            return linea.substring(campo.length + 1).trim();
+            return linea.substring(campo.length+1).trim();
 
         }
 
@@ -143,7 +188,7 @@ function convertirFecha(valor){
 
     const limpia = valor.replace(/T.*/,"");
 
-    if(limpia.length < 8) return null;
+    if(limpia.length<8) return null;
 
     return new Date(
 
@@ -156,3 +201,4 @@ function convertirFecha(valor){
 }
 
 cargarCalendario();
+        
