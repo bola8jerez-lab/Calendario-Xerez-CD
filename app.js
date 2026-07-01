@@ -106,15 +106,15 @@ async function cargarCalendario() {
 
     }
 
-    catch(error){
+    catch (error) {
+    console.error(error);
 
-        console.error(error);
-
-        nextMatch.innerHTML =
-        "⚠️ No se pudo leer el calendario.";
-
-    }
-
+    nextMatch.innerHTML = `
+        <strong>Error:</strong><br>
+        <code>${error.name}</code><br>
+        ${error.message}
+    `;
+}
 }
 
 cargarCalendario();
