@@ -5,7 +5,7 @@ const boton = document.getElementById("subscribeBtn");
 const ua = navigator.userAgent.toLowerCase();
 
 if (/iphone|ipad|ipod/.test(ua)) {
-    boton.textContent = "🍎 Añadir al Calendario";
+boton.textContent = "📅 Añadir al calendario";
 } else if (/android/.test(ua)) {
     boton.textContent = "🤖 Añadir al calendario";
 } else {
