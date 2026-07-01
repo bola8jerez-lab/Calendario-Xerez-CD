@@ -4,35 +4,37 @@ const HTTPS_URL = "https://bola8jerez-lab.github.io/Calendario-Xerez-CD/calendar
 const boton = document.getElementById("subscribeBtn");
 const ua = navigator.userAgent.toLowerCase();
 
-// Detectar dispositivo
 if (/iphone|ipad|ipod/.test(ua)) {
     boton.textContent = "🍎 Añadir al Calendario";
-    boton.href = WEBCAL_URL;
 } else if (/android/.test(ua)) {
     boton.textContent = "🤖 Añadir al calendario";
-    boton.href = WEBCAL_URL;
 } else {
     boton.textContent = "💻 Suscribirse al calendario";
-    boton.href = WEBCAL_URL;
 }
 
-// Leer el calendario
-async function cargarProximoPartido() {
-    try {
-        const respuesta = await fetch(HTTPS_URL);
-        const texto = await respuesta.text();
+boton.href = WEBCAL_URL;
 
-        const eventos = texto.split("BEGIN:VEVENT");
+async function cargarCalendario() {
+
+    try {
+
+        const respuesta = await fetch(HTTPS_URL + "?v=" + Date.now());
+
+        const ics = await respuesta.text();
+
+        const eventos = ics.split("BEGIN:VEVENT");
+
         const ahora = new Date();
 
-        let siguiente = null;
+        let proximo = null;
 
         eventos.forEach(evento => {
 
-            const fecha = evento.match(/DTSTART.*:(\d{8}T\d{6}Z?|\d{8})/);
             const resumen = evento.match(/SUMMARY:(.+)/);
 
-            if (!fecha || !resumen) return;
+            const fecha = evento.match(/DTSTART[^:]*:(\d{8}T\d{6}|\d{8})/);
+
+            if (!resumen || !fecha) return;
 
             const valor = fecha[1];
 
@@ -41,30 +43,33 @@ async function cargarProximoPartido() {
             if (valor.length === 8) {
 
                 partido = new Date(
-                    valor.substring(0,4),
-                    valor.substring(4,6)-1,
-                    valor.substring(6,8)
+                    Number(valor.slice(0,4)),
+                    Number(valor.slice(4,6))-1,
+                    Number(valor.slice(6,8))
                 );
 
             } else {
 
                 partido = new Date(
-                    valor.substring(0,4),
-                    valor.substring(4,6)-1,
-                    valor.substring(6,8),
-                    valor.substring(9,11),
-                    valor.substring(11,13)
+                    Number(valor.slice(0,4)),
+                    Number(valor.slice(4,6))-1,
+                    Number(valor.slice(6,8)),
+                    Number(valor.slice(9,11)),
+                    Number(valor.slice(11,13))
                 );
 
             }
 
             if (partido > ahora) {
 
-                if (!siguiente || partido < siguiente.fecha) {
+                if (!proximo || partido < proximo.fecha) {
 
-                    siguiente = {
+                    proximo = {
+
                         fecha: partido,
+
                         titulo: resumen[1].trim()
+
                     };
 
                 }
@@ -75,44 +80,48 @@ async function cargarProximoPartido() {
 
         const caja = document.getElementById("nextMatch");
 
-        if (!siguiente) {
+        if (!proximo) {
 
-            caja.innerHTML = "No hay partidos próximos.";
+            caja.innerHTML = "No hay partidos programados.";
 
             return;
 
         }
 
-        const dias = Math.ceil(
-            (siguiente.fecha - ahora) /
-            (1000 * 60 * 60 * 24)
-        );
+        const diferencia = proximo.fecha - ahora;
+
+        const dias = Math.floor(diferencia / 86400000);
+
+        const horas = Math.floor((diferencia % 86400000) / 3600000);
 
         caja.innerHTML = `
-            <strong>${siguiente.titulo}</strong><br><br>
+            <strong>${proximo.titulo}</strong><br><br>
 
-            📅 ${siguiente.fecha.toLocaleDateString("es-ES",{
+            📅 ${proximo.fecha.toLocaleDateString("es-ES",{
                 weekday:"long",
                 day:"numeric",
                 month:"long"
             })}<br>
 
-            🕒 ${siguiente.fecha.toLocaleTimeString("es-ES",{
+            🕒 ${proximo.fecha.toLocaleTimeString("es-ES",{
                 hour:"2-digit",
                 minute:"2-digit"
             })}<br><br>
 
-            ⏳ Faltan <strong>${dias}</strong> días
+            ⏳ Faltan ${dias} días y ${horas} horas
         `;
 
-    } catch (e) {
+    }
+
+    catch(e){
 
         document.getElementById("nextMatch").innerHTML =
-        "⚠️ No se pudo leer el calendario.";
+        "⚠️ Error al cargar el calendario.";
 
         console.error(e);
 
     }
+
 }
 
-cargarProximoPartido();
+cargarCalendario();
