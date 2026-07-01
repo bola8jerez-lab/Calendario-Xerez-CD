@@ -1,48 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Xerez Club Deportivo</title>
 
-<title>Calendario Xerez CD</title>
+    <link rel="stylesheet" href="style.css">
 
-<style>
-body{
-font-family:Arial;
-text-align:center;
-background:#0b2a5b;
-color:white;
-padding:40px;
-}
-
-a{
-display:inline-block;
-background:white;
-color:#0b2a5b;
-padding:15px 25px;
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-}
-</style>
-
+    <meta name="theme-color" content="#0054A6">
 </head>
 
 <body>
 
-<h1>📅 Calendario Xerez CD</h1>
+<main class="contenedor">
 
-<p>
-Suscríbete y recibe todos los partidos en tu calendario
-</p>
+    <img src="escudo.png" class="escudo" alt="Escudo Xerez Club Deportivo">
 
-<a href="calendario.ics">
-Añadir calendario
-</a>
+    <h1>Calendario del<br>Xerez Club Deportivo</h1>
 
-<p>
-Compatible con iPhone, Android, Google Calendar y Outlook
-</p>
+    <p class="descripcion">
+        No te pierdas ningún partido.
+        Suscríbete gratis y recibe automáticamente cualquier cambio de fecha u horario.
+    </p>
+
+    <a id="subscribeBtn" class="boton">
+        Suscribirme gratis
+    </a>
+
+    <section class="tarjeta">
+
+        <h2>📅 Próximo partido</h2>
+
+        <div id="nextMatch">
+
+            Cargando calendario...
+
+        </div>
+
+    </section>
+
+    <section class="tarjeta">
+
+        <h2>🔄 Siempre actualizado</h2>
+
+        <p>
+            Cuando el club cambie un horario,
+            tu calendario se actualizará automáticamente.
+        </p>
+
+    </section>
+
+    <section class="tarjeta">
+
+        <h2>📱 Compatible</h2>
+
+        <div class="compatibles">
+
+            <span>🍎 iPhone</span>
+            <span>🤖 Android</span>
+            <span>📅 Google Calendar</span>
+            <span>💻 Outlook</span>
+
+        </div>
+
+    </section>
+
+    <footer>
+
+        Proyecto realizado por aficionados del
+        Xerez Club Deportivo.
+
+    </footer>
+
+</main>
+
+<script src="app.js"></script>
 
 </body>
 </html>
